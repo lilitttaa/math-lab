@@ -1,15 +1,17 @@
 #pragma once
-#include <vector>
+
+class Vector;
+class Matrix;
 
 // https://games-1312234642.cos.ap-guangzhou.myqcloud.com/course/GAMES001/GAMES001-Lecture13.pdf
 class LUSolver
 {
 public:
-	void LUSolve_Inplace(std::vector<std::vector<float>>& A, const std::vector<float>& b, std::vector<float>& x);
+	void LUSolve_Inplace(Matrix& A, const Vector& b, Vector& x);
 
-	void LUDecomposition_Inplace(std::vector<std::vector<float>>& A);
+	void LUDecomposition_Inplace(Matrix& A);
 
-	void SolveLowerTriangular(const std::vector<std::vector<float>>& L, const std::vector<float>& b, std::vector<float>& y);
+	void SolveLowerTriangular(const Matrix& L, const Vector& b, Vector& y);
 
-	void SolveUpperTriangular(const std::vector<std::vector<float>>& U, const std::vector<float>& y, std::vector<float>& x);
+	void SolveUpperTriangular(const Matrix& U, const Vector& y, Vector& x);
 };
