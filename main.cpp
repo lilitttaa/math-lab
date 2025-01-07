@@ -81,14 +81,14 @@ void TestLUSolver()
 	{
 		std::vector<std::vector<float>> A = OA;
 		LUSolver solver;
-		
+
 		solver.LUDecomposition_Inplace(A);
 		EXPECT_EQ_MATRIX_FLOAT(A, {
 			{2, 1, -1},
 			{-1.5, 0.5, 0.5},
 			{-1, 4, -1}
 		});
-		
+
 		std::vector<float> y;
 		solver.SolveLowerTriangular(A, b, y);
 		EXPECT_EQ_VECTOR_FLOAT(y, {8, 1, 1});
@@ -100,17 +100,16 @@ void TestLUSolver()
 	{
 		std::vector<std::vector<float>> A = OA;
 		LUSolver solver;
-		
+
 		std::vector<float> x;
 		solver.LUSolve_Inplace(A, b, x);
 		EXPECT_EQ_VECTOR_FLOAT(x, {2, 3, -1});
 		std::cout << "Test passed: " << TestPassed << "/" << TestNumber << std::endl;
 	}
-
 }
 
 int main()
 {
-	Test();
+	TestLUSolver();
 	return 0;
 }

@@ -1,6 +1,14 @@
 #include "LUSolver.h"
 #include <vector>
 
+void LUSolver::LUSolve_Inplace(std::vector<std::vector<float>>& A, const std::vector<float>& b, std::vector<float>& x)
+{
+	LUDecomposition_Inplace(A);
+	std::vector<float> y;
+	SolveLowerTriangular(A, b, y);
+	SolveUpperTriangular(A, y, x);
+}
+
 void LUSolver::LUDecomposition_Inplace(std::vector<std::vector<float>>& A)
 {
 	const size_t n = A.size();
@@ -35,12 +43,4 @@ void LUSolver::SolveUpperTriangular(const std::vector<std::vector<float>>& U, co
 		for (size_t j = i + 1; j < n; ++j) { x[i] -= U[i][j] * x[j]; }
 		x[i] /= U[i][i];
 	}
-}
-
-void LUSolver::LUSolve_Inplace(std::vector<std::vector<float>>& A, const std::vector<float>& b, std::vector<float>& x)
-{
-	LUDecomposition_Inplace(A);
-	std::vector<float> y;
-	SolveLowerTriangular(A, b, y);
-	SolveUpperTriangular(A, y, x);
 }
