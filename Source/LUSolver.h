@@ -7,7 +7,9 @@ class Matrix;
 class LUSolver
 {
 public:
-	void LUSolve_Inplace(Matrix& A, const Vector& b, Vector& x);
+	void Solve_Inplace(Matrix& A, const Vector& b, Vector& x);
+
+	void Solve(const Matrix& A, const Vector& b, Vector& x);
 
 	void LUDecomposition_Inplace(Matrix& A);
 

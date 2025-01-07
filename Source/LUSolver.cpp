@@ -3,12 +3,18 @@
 #include "Matrix.h"
 #include "Vector.h"
 
-void LUSolver::LUSolve_Inplace(Matrix& A, const Vector& b, Vector& x)
+void LUSolver::Solve_Inplace(Matrix& A, const Vector& b, Vector& x)
 {
 	LUDecomposition_Inplace(A);
 	Vector y(b.Size());
 	SolveLowerTriangular(A, b, y);
 	SolveUpperTriangular(A, y, x);
+}
+
+void LUSolver::Solve(const Matrix& A, const Vector& b, Vector& x)
+{
+	Matrix AA = A;
+	Solve_Inplace(AA, b, x);
 }
 
 void LUSolver::LUDecomposition_Inplace(Matrix& A)

@@ -41,7 +41,7 @@ void EXPECT_EQ_MATRIX_FLOAT(const Matrix& actual, const Matrix& expect)
 			const size_t m = actual.Cols();
 			for (size_t j = 0; j < m; ++j)
 			{
-				if (abs(actual(i,j) - expect(i,j)) > 1e-6)
+				if (abs(actual(i, j) - expect(i, j)) > 1e-6)
 				{
 					throw std::runtime_error(
 						"Matrix A is not equal to matrix B \nExpected:\n" + expect.ToString() + "Actual:\n" + actual.ToString());
@@ -135,7 +135,7 @@ void TestLUSolver()
 		LUSolver solver;
 
 		Vector x;
-		solver.LUSolve_Inplace(A, b, x);
+		solver.Solve_Inplace(A, b, x);
 		EXPECT_EQ_VECTOR_FLOAT(x, {2, 3, -1});
 	}
 }
@@ -154,6 +154,27 @@ void TestJacobiSolver()
 		solver.Solve(A, b, x, 1e-6, 100);
 		EXPECT_EQ_VECTOR_FLOAT_TOLRANCE(x, {-0.25, -8.5, -5.75}, 1e-6);
 	}
+	
+}
+
+void TestJacobiSolveLaplacianSmoothing()
+{
+	Matrix A = std::vector<std::vector<float>>{
+				{1, 0, 0, 0},
+				{-1, 2, -1, 0},
+				{0, -1, 2, -1},
+				{0, 0, 0, 1}
+	};
+	const Vector b = {0, 1, 2, 1};
+	
+	JacobiSolver solver;
+	Vector x;
+	solver.Solve(A, b, x, 1e-6, 100);
+		
+	LUSolver luSolver;
+	Vector x2;
+	luSolver.Solve_Inplace(A, b, x2);
+	EXPECT_EQ_VECTOR_FLOAT_TOLRANCE(x, x2, 1e-6);
 }
 
 void TestMatrix()
@@ -207,14 +228,14 @@ void TestMatrix()
 	{
 		// Matrix - Matrix
 		Matrix A = std::vector<std::vector<float>>{
-				{1, 2, 3},
-				{4, 5, 6},
-				{7, 8, 9}
+			{1, 2, 3},
+			{4, 5, 6},
+			{7, 8, 9}
 		};
 		Matrix B = std::vector<std::vector<float>>{
-				{9, 8, 7},
-				{6, 5, 4},
-				{3, 2, 1}
+			{9, 8, 7},
+			{6, 5, 4},
+			{3, 2, 1}
 		};
 		EXPECT_EQ_MATRIX_FLOAT(A - B, std::vector<std::vector<float>>{
 			{-8, -6, -4},
@@ -262,6 +283,7 @@ int main()
 	TestMatrix();
 	TestLUSolver();
 	TestJacobiSolver();
+	TestJacobiSolveLaplacianSmoothing();
 	std::cout << "Test passed: " << TestPassed << "/" << TestNumber << std::endl;
 	return 0;
 }
