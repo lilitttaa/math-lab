@@ -73,6 +73,16 @@ float Vector::operator*(const Vector& other) const
 
 Vector Vector::operator/(const float scalar) const { return *this * (1.0f / scalar); }
 
+float Vector::Norm() const
+{
+	return sqrt(*this * *this);
+}
+
+float Vector::SquaredNorm() const
+{
+	return *this * *this;
+}
+
 size_t Vector::Size() const { return size_; }
 
 std::string Vector::ToString() const

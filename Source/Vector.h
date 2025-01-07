@@ -30,6 +30,10 @@ public:
 
 	Vector operator/(const float scalar) const;
 
+	float Norm() const;
+
+	float SquaredNorm() const;
+
 	size_t Size() const;
 
 	std::string ToString() const;

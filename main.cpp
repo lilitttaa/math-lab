@@ -2,6 +2,8 @@
 #include <stdexcept>
 #include <string>
 #include <vector>
+
+#include "JacobiSolver.h"
 #include "LUSolver.h"
 #include "Matrix.h"
 #include "Vector.h"
@@ -78,6 +80,29 @@ void EXPECT_EQ_VECTOR_FLOAT(const Vector& actual, const Vector& expect)
 	TestPassed++;
 }
 
+void EXPECT_EQ_VECTOR_FLOAT_TOLRANCE(const Vector& actual, const Vector& expect, const float tol)
+{
+	TestNumber++;
+	try
+	{
+		const size_t n = actual.Size();
+		for (size_t i = 0; i < n; ++i)
+		{
+			if (abs(actual(i) - expect(i)) > tol)
+			{
+				throw std::runtime_error(
+					"Vector A is not equal to vector B \nExpected:\n" + expect.ToString() + "Actual:\n" + actual.ToString());
+			}
+		}
+	}
+	catch (const std::runtime_error& e)
+	{
+		std::cerr << e.what() << std::endl;
+		return;
+	}
+	TestPassed++;
+}
+
 void TestLUSolver()
 {
 	Matrix OA = std::vector<std::vector<float>>{
@@ -112,6 +137,22 @@ void TestLUSolver()
 		Vector x;
 		solver.LUSolve_Inplace(A, b, x);
 		EXPECT_EQ_VECTOR_FLOAT(x, {2, 3, -1});
+	}
+}
+
+void TestJacobiSolver()
+{
+	Matrix A = std::vector<std::vector<float>>{
+		{2, -1, 0},
+		{-1, 2, -1},
+		{0, -1, 2}
+	};
+	const Vector b = {8, -11, -3};
+	{
+		JacobiSolver solver;
+		Vector x;
+		solver.Solve(A, b, x, 1e-6, 100);
+		EXPECT_EQ_VECTOR_FLOAT_TOLRANCE(x, {-0.25, -8.5, -5.75}, 1e-6);
 	}
 }
 
@@ -217,9 +258,10 @@ void TestVector()
 
 int main()
 {
-	TestLUSolver();
-	TestMatrix();
 	TestVector();
+	TestMatrix();
+	TestLUSolver();
+	TestJacobiSolver();
 	std::cout << "Test passed: " << TestPassed << "/" << TestNumber << std::endl;
 	return 0;
 }
