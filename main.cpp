@@ -157,6 +157,22 @@ void TestJacobiSolver()
 	
 }
 
+void TestConjunctionGradientSolver()
+{
+Matrix A = std::vector<std::vector<float>>{
+		{2, -1, 0},
+		{-1, 2, -1},
+		{0, -1, 2}
+	};
+	const Vector b = {8, -11, -3};
+	{
+		JacobiSolver solver;
+		Vector x;
+		solver.Solve(A, b, x, 1e-6, 100);
+		EXPECT_EQ_VECTOR_FLOAT_TOLRANCE(x, {-0.25, -8.5, -5.75}, 1e-6);
+	}
+}
+
 void TestJacobiSolveLaplacianSmoothing()
 {
 	Matrix A = std::vector<std::vector<float>>{
@@ -284,6 +300,7 @@ int main()
 	TestLUSolver();
 	TestJacobiSolver();
 	TestJacobiSolveLaplacianSmoothing();
+	TestConjunctionGradientSolver();
 	std::cout << "Test passed: " << TestPassed << "/" << TestNumber << std::endl;
 	return 0;
 }

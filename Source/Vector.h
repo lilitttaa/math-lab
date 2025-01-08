@@ -1,6 +1,8 @@
 #pragma once
 #include <vector>
 
+class Matrix;
+
 class Vector
 {
 public:
@@ -27,6 +29,8 @@ public:
 	Vector operator*(const float scalar) const;
 
 	float operator*(const Vector& other) const;
+
+	Vector operator*(const Matrix& other) const;
 
 	Vector operator/(const float scalar) const;
 

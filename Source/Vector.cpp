@@ -3,6 +3,8 @@
 #include <string>
 #include <Vector.h>
 
+#include "Matrix.h"
+
 Vector::Vector()
 {
 	size_ = 0;
@@ -68,6 +70,17 @@ float Vector::operator*(const Vector& other) const
 	CheckSameSize(other);
 	float result = 0.0f;
 	for (size_t i = 0; i < size_; ++i) { result += data_[i] * other(i); }
+	return result;
+}
+
+Vector Vector::operator*(const Matrix& other) const
+{
+	if (other.Rows() != size_) { throw std::invalid_argument("Matrix and vector dimensions do not match."); }
+	Vector result(other.Cols());
+	for (size_t i = 0; i < other.Cols(); ++i)
+	{
+		for (size_t j = 0; j < size_; ++j) { result(i) += data_[j] * other(j, i); }
+	}
 	return result;
 }
 
